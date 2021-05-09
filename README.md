@@ -8,6 +8,8 @@ $ mix do deps.get, compile
 $ mix ecto.setup
 ```
 
+Note: `.iex.exs` is aliasing and importing a few functions to enable below queries.
+
 Jump into the IEx shell.
 ```elixir
 iex> {:ok, tree} = MyCTE.tree(5, depth: 2)
@@ -17,47 +19,56 @@ iex> {:ok, tree} = MyCTE.tree(5, depth: 2)
      1 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 1,
-       name: "Bob"
+       name: "Bob",
+       skill: "Beatboxing"
      },
      2 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 2,
-       name: "Matthew"
+       name: "Matthew",
+       skill: "Building"
      },
      3 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 3,
-       name: "Kimberley"
+       name: "Kimberley",
+       skill: "Writing"
      },
      4 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 4,
-       name: "Daniel"
+       name: "Daniel",
+       skill: "Analysis"
      },
      5 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 5,
-       name: "Elizabeth"
+       name: "Elizabeth",
+       skill: "Networking"
      },
      6 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 6,
-       name: "Peta"
+       name: "Peta",
+       skill: "Research"
      },
      7 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 7,
-       name: "Abigail"
+       name: "Abigail",
+       skill: "Styling"
      },
      8 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 8,
-       name: "Jenny"
+       name: "Jenny",
+       skill: "Coordination"
      },
-     9 => %Friends.Nodes{ 
+     9 => %Friends.Nodes{
        __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
        id: 9,
-       name: "Alex"
+       name: "Alex",
+       skill: "Technology"
      }
    },
    paths: [
@@ -98,15 +109,69 @@ Elizabeth
    └── Jenny
 []
 
-iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, "#{&2[&1].name}: #{&2[&1].skill}"}))
-Elizabeth: Networking
-├── Matthew: Building
-│  └── Bob: Beatboxing
-├── Alex: Technology
-│  └── Abigail: Styling
-└── Daniel: Analysis
-   ├── Kimberley: Writing
-   ├── Peta: Research
-   └── Jenny: Coordination
+iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, "#{&2[&1].name} (#{&2[&1].id}): #{&2[&1].skill}"}))
+Elizabeth (5): Networking
+├── Matthew (2): Building
+│  └── Bob (1): Beatboxing
+├── Alex (9): Technology
+│  └── Abigail (7): Styling
+└── Daniel (4): Analysis
+   ├── Kimberley (3): Writing
+   ├── Peta (6): Research
+   └── Jenny (8): Coordination
+[]
+
+iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, {&2[&1].name, &2[&1].skill}}), raw: true)
+[
+  {0, {"Elizabeth", "Networking"}},
+  {1, {"Matthew", "Building"}},
+  {2, {"Bob", "Beatboxing"}},
+  {1, {"Alex", "Technology"}},
+  {2, {"Abigail", "Styling"}},
+  {1, {"Daniel", "Analysis"}},
+  {2, {"Kimberley", "Writing"}},
+  {2, {"Peta", "Research"}},
+  {2, {"Jenny", "Coordination"}}
+]
+
+iex> MyCTE.descendants(5)
+{:ok, [2, 4, 9, 7, 8, 6, 3, 1]}
+
+iex> MyCTE.ancestors(8)
+{:ok, [5, 4]}
+
+iex> MyCTE.ancestors(8, nodes: true)
+{:ok,
+ [
+   %Friends.Nodes{
+     __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
+     id: 5,
+     name: "Elizabeth",
+     skill: "Networking"
+   },
+   %Friends.Nodes{
+     __meta__: #Ecto.Schema.Metadata<:loaded, "nodes">,
+     id: 4,
+     name: "Daniel",
+     skill: "Analysis"
+   }
+ ]}
+
+iex> MyCTE.move(4, 2)
+{:ok, {6, nil}}
+
+iex> {:ok, tree} = MyCTE.tree(5, depth: 4)
+...
+
+iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, "#{&2[&1].name} (#{&2[&1].id}): #{&2[&1].skill}"}))
+Elizabeth (5): Networking
+├── Matthew (2): Building
+│  ├── Bob (1): Beatboxing
+│  └── Daniel (4): Analysis
+│     ├── Kimberley (3): Writing
+│     ├── Peta (6): Research
+│     └── Jenny (8): Coordination
+└── Alex (9): Technology
+   └── Abigail (7): Styling
 []
 ```
