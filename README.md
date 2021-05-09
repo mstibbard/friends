@@ -85,18 +85,16 @@ iex> {:ok, tree} = MyCTE.tree(5, depth: 2)
      [8, 8, 0]
    ]
  }}
-```
 
-TODO: Figure out the callback... latest attempt...
-
-```elixir
-iex> CTE.Utils.print_tree(tree, 5, callback: &("#{&2[&1].name}"))
-** (MatchError) no match of right hand side value: "Elizabeth"
-    (closure_table 1.0.10) lib/cte/utils.ex:104: anonymous fn/4 in CTE.Utils.print_tree/3
-    (closure_table 1.0.10) lib/cte/utils.ex:123: anonymous fn/3 in CTE.Utils.print_tree/6
-    (elixir 1.11.4) lib/enum.ex:1109: anonymous fn/3 in Enum.flat_map_reduce/3
-    (elixir 1.11.4) lib/enum.ex:3776: Enumerable.List.reduce/3
-    (elixir 1.11.4) lib/enum.ex:1108: Enum.flat_map_reduce/3
-    (closure_table 1.0.10) lib/cte/utils.ex:122: CTE.Utils.print_tree/6
-    (closure_table 1.0.10) lib/cte/utils.ex:112: CTE.Utils._print_tree/3
+iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, &2[&1].name}))
+Elizabeth
+├── Matthew
+│  └── Bob
+├── Alex
+│  └── Abigail
+└── Daniel
+   ├── Kimberley
+   ├── Peta
+   └── Jenny
+[]
 ```
