@@ -4,11 +4,12 @@ defmodule Friends.Nodes do
 
   schema "nodes" do
     field :name, :string
+    field :skill, :string
   end
 
   def changeset(params \\ %{}) do
     %Friends.Nodes{}
-    |> cast(params, [:name])
-    |> validate_required(:name)
+    |> cast(params, [:name, :skill])
+    |> validate_required(:name, :skill)
   end
 end

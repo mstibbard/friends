@@ -97,4 +97,16 @@ Elizabeth
    ├── Peta
    └── Jenny
 []
+
+iex> CTE.Utils.print_tree(tree, 5, callback: &({&1, "#{&2[&1].name}: #{&2[&1].skill}"}))
+Elizabeth: Networking
+├── Matthew: Building
+│  └── Bob: Beatboxing
+├── Alex: Technology
+│  └── Abigail: Styling
+└── Daniel: Analysis
+   ├── Kimberley: Writing
+   ├── Peta: Research
+   └── Jenny: Coordination
+[]
 ```

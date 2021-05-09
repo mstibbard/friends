@@ -5,15 +5,15 @@ Repo.delete_all(Friends.Nodes)
 Repo.delete_all(Friends.Paths)
 
 """
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('1', 'Bob');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('3', 'Kimberley');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('4', 'Daniel');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('5', 'Elizabeth');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('2', 'Matthew');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('6', 'Peta');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('7', 'Abigail');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('8', 'Jenny');
-INSERT INTO "public"."nodes" ("id", "name") VALUES ('9', 'Alex');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('1', 'Bob', 'Beatboxing');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('3', 'Kimberley', 'Writing');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('4', 'Daniel', 'Analysis');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('5', 'Elizabeth', 'Networking');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('2', 'Matthew', 'Building');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('6', 'Peta', 'Research');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('7', 'Abigail', 'Styling');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('8', 'Jenny', 'Coordination');
+INSERT INTO "public"."nodes" ("id", "name", "skill") VALUES ('9', 'Alex', 'Technology');
 """
 |> String.split("\n")
 |> Enum.each(&Repo.query/1)
